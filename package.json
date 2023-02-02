@@ -1,0 +1,22 @@
+{
+  "name": "logseq-date-between",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "logseq"
+  ],
+  "author": "Cologler",
+  "license": "MIT",
+  "devDependencies": {
+    "@logseq/libs": "^0.0.14",
+    "typescript": "^4.9.5"
+  },
+  "logseq": {
+    "id": "_2fqw7xci9"
+  }
+}
