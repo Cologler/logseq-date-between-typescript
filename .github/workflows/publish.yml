@@ -4,7 +4,9 @@ on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
-      - "*" # Push events to matching any tag format, i.e. 1.0, 20.15.10
+      - "v*" # Push events to matching any tag format, i.e. 1.0, 20.15.10
+    branches:
+      - "main"
 
 env:
   PLUGIN_NAME: logseq-date-between
