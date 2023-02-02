@@ -1,6 +1,6 @@
 {
   "name": "logseq-date-between",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -17,6 +17,6 @@
     "typescript": "^4.9.5"
   },
   "logseq": {
-    "id": "_2fqw7xci9"
+    "id": "logseq-date-between"
   }
 }
