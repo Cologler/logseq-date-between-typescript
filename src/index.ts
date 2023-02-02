@@ -155,4 +155,4 @@ async function main () {
 }
 
 // bootstrap
-logseq.ready(main);
+logseq.ready(main).catch(console.error);
