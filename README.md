@@ -6,6 +6,6 @@ Just make a timeline.
 
 ## Usage
 
-Insert `{{renderer date-between-today}}` next to your date.
+Insert `{{renderer date-between-today}}` nearby your date.
 
 *You can use slash command `DateBetween: Date between today` to insert the same thing.*
