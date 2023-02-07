@@ -1,6 +1,13 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
+// add any language here:
+import 'dayjs/locale/ja'
+import 'dayjs/locale/zh-cn'
+import 'dayjs/locale/zh-hk'
+import 'dayjs/locale/zh-tw'
+import 'dayjs/locale/zh'
+
 dayjs.extend(relativeTime);
 
 const DateFormatConfigsMappings = new Map<string, {
@@ -65,6 +72,7 @@ function getDateBetweenTodayString(date: Date) {
 async function main () {
     const userConfigs = await logseq.App.getUserConfigs();
     const preferredDateFormat = userConfigs.preferredDateFormat;
+    dayjs.locale(userConfigs.preferredLanguage);
 
     const unloadPageDisposers: (() => void)[] = [];
     const unloadPluginDisposers: (() => void | undefined)[] = [];
