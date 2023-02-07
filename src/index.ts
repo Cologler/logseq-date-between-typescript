@@ -3,10 +3,15 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 // add any language here:
 import 'dayjs/locale/ja'
-import 'dayjs/locale/zh-cn'
+import dayjsZhCn from 'dayjs/locale/zh-cn'
 import 'dayjs/locale/zh-hk'
 import 'dayjs/locale/zh-tw'
-import 'dayjs/locale/zh'
+import dayjsZh from 'dayjs/locale/zh'
+
+const today = 'today';
+
+(dayjsZhCn as any)[today] = '今天';
+(dayjsZh as any)[today] = '今天';
 
 dayjs.extend(relativeTime);
 
@@ -53,13 +58,10 @@ export function parseDate(content: string, preferredDateFormat?: string) {
 export function getDateBetweenString(date: Date, other: Date) {
     const compared = dayjs(other).startOf('day');
     const day = dayjs(date).startOf('day');
+    const locale = dayjs.Ls[dayjs.locale()] as any;
 
     if (day.isSame(compared)) {
-        return 'today';
-    }
-
-    if (day.subtract(1, 'day').isSame(compared)) {
-        return 'in tomorrow';
+        return locale[today] || today;
     }
 
     return day.from(compared);

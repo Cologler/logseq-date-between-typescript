@@ -20,10 +20,7 @@ describe('getDateBetweenString', () => {
 
     it('can show in * days', () => {
         expect(getDateBetweenString(new Date('2023/2/9'), today)).toStrictEqual('in 2 days');
-    });
-
-    it('can show tomorrow', () => {
-        expect(getDateBetweenString(new Date('2023/2/8'), today)).toStrictEqual('in tomorrow');
+        expect(getDateBetweenString(new Date('2023/2/8'), today)).toStrictEqual('in a day');
     });
 
     it('can show today', () => {
