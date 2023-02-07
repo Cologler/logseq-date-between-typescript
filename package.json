@@ -2,10 +2,10 @@
   "name": "logseq-date-between",
   "version": "0.0.2",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/index.umd.js",
   "scripts": {
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "vite build",
+    "test": "vitest"
   },
   "keywords": [
     "logseq"
@@ -14,9 +14,14 @@
   "license": "MIT",
   "devDependencies": {
     "@logseq/libs": "^0.0.14",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "vite": "^4.1.1",
+    "vitest": "^0.28.4"
   },
   "logseq": {
     "id": "logseq-date-between"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.7"
   }
 }

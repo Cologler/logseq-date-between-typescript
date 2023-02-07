@@ -1,70 +1,55 @@
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
-const dateFormatRegexpsMappings = new Map<string, RegExp>();
+dayjs.extend(relativeTime);
+
+const DateFormatConfigsMappings = new Map<string, {
+    Regex: RegExp
+}>();
 (() => {
     for (const dateFormat of ['yyyy-MM-dd', 'yyyy-MM-dd EEEE', 'yyyy/MM/dd', 'yyyy_MM_dd']) {
-        dateFormatRegexpsMappings.set(dateFormat,
-            /(?<year>\d{4})[/\-_]?(?<month>\d{1,2})[/\-_]?(?<day>\d{1,2})/);
+        const lookupRegex = new RegExp(dateFormat
+            .replace('yyyy', '(?<year>\\d{4})')
+            .replace('MM', '(?<month>\\d{1,2})')
+            .replace('dd', '(?<day>\\d{1,2})'))
+        DateFormatConfigsMappings.set(dateFormat,
+            {
+                Regex: lookupRegex
+            });
     }
 })();
 
+function parseDateFromDateFormat(content: string, preferredDateFormat: string) {
+    const formatConfig = DateFormatConfigsMappings.get(preferredDateFormat);
+    if (formatConfig) {
+        const datePartMatch = content.match(formatConfig.Regex);
+        if (datePartMatch) {
+            content = datePartMatch[0];
+        }
+    }
+
+    const parseFromDayjs = dayjs(content, preferredDateFormat);
+    if (parseFromDayjs.isValid()) {
+        return parseFromDayjs.toDate();
+    }
+}
+
+export function parseDate(content: string, preferredDateFormat?: string) {
+    if (preferredDateFormat) {
+        const dateFromFormat = parseDateFromDateFormat(content, preferredDateFormat);
+        if (dateFromFormat) {
+            return dateFromFormat;
+        }
+    }
+}
+
+function getDateBetweenTodayString(date: Date) {
+    return dayjs(date).fromNow();
+}
+
 async function main () {
-    const preferredDateFormat = (await logseq.App.getUserConfigs()).preferredDateFormat; // how to parse from this?
-    if (!dateFormatRegexpsMappings.has(preferredDateFormat)) {
-        return;
-    }
-
-    const dateFormatRegex = dateFormatRegexpsMappings.get(preferredDateFormat)!;
-
-    function buildDate(yearString: string, monthString: string, dayString: string) {
-        const date = new Date(`${yearString}-${monthString}-${dayString}`);
-        if (date.toString() === 'Invalid Date') {
-            return null;
-        }
-        return date;
-    }
-
-    function parseDate(content: string) {
-
-        const match = content.match(dateFormatRegex);
-        if (match?.groups) {
-            return buildDate(
-                match.groups.year,
-                match.groups.month,
-                match.groups.day
-            )
-        }
-
-        return null;
-    }
-
-    function getBetweenString(date: Date) {
-        const today = new Date();
-        if (today > date) {
-            const days = (today.getTime() - date.getTime()) / 1000 / 3600 / 24;
-            const years = today.getFullYear() - date.getFullYear();
-            const months = years * 12 + today.getMonth() - date.getMonth();
-
-            if (days > 365) {
-                return `${Math.max(years, 1)} years ago`;
-
-            } else if (days > 30) {
-                return `${Math.max(months, 1)} months ago`;
-
-            } else if (days < 1) {
-                return "today";
-
-            } else {
-                return `${days.toFixed(0)} days ago`;
-            }
-        } else {
-            const days = ((date.getTime() - today.getTime()) / 1000 / 3600 / 24);
-            if (days < 1) {
-                return "today";
-            } else {
-                return `after ${days.toFixed(0)} days`;
-            }
-        }
-    }
+    const userConfigs = await logseq.App.getUserConfigs();
+    const preferredDateFormat = userConfigs.preferredDateFormat;
 
     const unloadPageDisposers: (() => void)[] = [];
     const unloadPluginDisposers: (() => void | undefined)[] = [];
@@ -109,10 +94,10 @@ async function main () {
 
                 const blocks = await logseq.Editor.getCurrentPageBlocksTree();
                 for (const block of blocks) {
-                    const date = parseDate(block.content);
+                    const date = parseDate(block.content, preferredDateFormat);
                     if (date) {
                         const disposer: any = logseq.App.onBlockRendererSlotted(block.uuid, ({ slot }) => {
-                            let between = getBetweenString(date);
+                            let between = getDateBetweenTodayString(date);
                             logseq.provideUI({
                                 slot,
                                 template: getDateBetweenBlock(between),
@@ -133,9 +118,9 @@ async function main () {
 
             const block = await logseq.Editor.getBlock(e.payload.uuid);
             if (block) {
-                const date = parseDate(block.content);
+                const date = parseDate(block.content, preferredDateFormat);
                 if (date) {
-                    let between = getBetweenString(date);
+                    let between = getDateBetweenTodayString(date);
                     logseq.provideUI({
                         slot: e.slot,
                         key: `date-between-${block.uuid}`,
@@ -155,4 +140,6 @@ async function main () {
 }
 
 // bootstrap
-logseq.ready(main).catch(console.error);
+if (typeof logseq !== 'undefined') {
+    logseq.ready(main).catch(console.error);
+}
