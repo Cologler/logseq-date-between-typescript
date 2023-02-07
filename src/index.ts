@@ -43,8 +43,23 @@ export function parseDate(content: string, preferredDateFormat?: string) {
     }
 }
 
+export function getDateBetweenString(date: Date, other: Date) {
+    const compared = dayjs(other).startOf('day');
+    const day = dayjs(date).startOf('day');
+
+    if (day.isSame(compared)) {
+        return 'today';
+    }
+
+    if (day.subtract(1, 'day').isSame(compared)) {
+        return 'in tomorrow';
+    }
+
+    return day.from(compared);
+}
+
 function getDateBetweenTodayString(date: Date) {
-    return dayjs(date).fromNow();
+    return getDateBetweenString(date, new Date());
 }
 
 async function main () {
