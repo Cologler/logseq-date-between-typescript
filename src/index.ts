@@ -108,6 +108,7 @@ async function main () {
             padding: 0 0.4em 0 0.4em;
             font-size: 0.9em;
             color: var(--ls-active-secondary-color);
+            line-height: initial;
         }
     `);
 
