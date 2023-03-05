@@ -1,8 +1,8 @@
 {
   "name": "logseq-date-between",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "",
-  "main": "dist/index.umd.js",
+  "main": "dist/index.html",
   "scripts": {
     "build": "vite build",
     "test": "vitest"
