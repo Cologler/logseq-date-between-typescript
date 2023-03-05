@@ -8,6 +8,8 @@ import 'dayjs/locale/zh-hk'
 import 'dayjs/locale/zh-tw'
 import dayjsZh from 'dayjs/locale/zh'
 
+import '@logseq/libs';
+
 const today = 'today';
 
 (dayjsZhCn as any)[today] = '今天';
