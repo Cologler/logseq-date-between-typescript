@@ -13,6 +13,10 @@ describe('parseDate', () => {
         expect(parseDate('1997-1-1', 'yyyy-MM-dd')).toStrictEqual(new Date(1997, 0, 1));
         expect(parseDate('1997-01-01', 'yyyy-MM-dd')).toStrictEqual(new Date(1997, 0, 1));
     });
+
+    it('can parse MMM do, yyyy', () => {
+        expect(parseDate('Feb 11th, 2024', 'MMM do, yyyy')).toStrictEqual(new Date(2024, 1, 11));
+    });
 });
 
 describe('getDateBetweenString', () => {
