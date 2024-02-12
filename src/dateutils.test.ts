@@ -1,7 +1,7 @@
 
 import { assert, describe, expect, it } from 'vitest';
 
-import { parseDate, getDateBetweenString } from '.';
+import { parseDate, getDateBetweenString } from './dateutils';
 
 describe('parseDate', () => {
     it('can parse yyyy/MM/dd', () => {
