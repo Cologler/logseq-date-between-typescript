@@ -69,7 +69,7 @@ const DateFormatConfigsMappings = new Map<string, {
             .replace('.', '\\.')
         , 'i');
 
-        DateFormatConfigsMappings.set(dateFormat,
+        DateFormatConfigsMappings.set(originDateFormat,
             {
                 contentRegex: contentLookupRegex
             });
